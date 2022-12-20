@@ -7,37 +7,23 @@
     <title>Document</title>
 </head>
 <body>
-    <H1>채팅방</H1>
-    <div></div>
-    <input type="text", id="chatInput">
-    <button onclick="onButtonClicked()">전송</button>
+    <H1>AXIOS 테스트s</H1>
+    <button onclick="onButtonClicked()">붐</button>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
     <script>
        function onButtonClicked(){
-
-        //채팅 관련 정보 가져오기
-        var ChattingForm = document.getElementById('chatInput')
-        
-        var chatInputInfo = ChattingForm.value  //채팅 내용
-
-
-        //axios로 서버에 message_history 전송(roon_id, from_id, to_id, contents)
         axios
-        .post('http://localhost:8080/api/v1/chat',{ 
-            room_id:1,
-            from_id:1,
-            to_id:2,
-            contents:chatInputInfo,
+        .post('http://localhost:8080/api/user',{
+            firstname:'hello',
+            age:17
         })
         .then(function(response){
             console.log(response);
-
         })
         .catch(function(error){
             console.log("에러"+error)
         })
-
        };
     </script>
 </body>
