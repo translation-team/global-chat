@@ -32,7 +32,10 @@ class User(BaseModel):
 async def get_user(user:User):
     print(user)
 
-    return {'hello':'world'}
+    return {
+        'room_id':1,'user_id':1,'friend_id':2,
+        'content':'안녕하세요.'
+        }
 
 @app.get('/')
 async def index():

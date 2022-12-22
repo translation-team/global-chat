@@ -11,3 +11,19 @@ class UserCreate(BaseModel):
     hashpw: str
     profile_pic: str
     lang:str
+
+class FriendCreate(BaseModel):
+    friend_name: str
+    
+class OriginCreate(BaseModel):
+    body:str
+    lang:str
+
+class ResultCreate(BaseModel):
+    body:str
+    lang:str
+
+class MessageCreate(BaseModel):
+    room_id:int
+    from_id:int
+    to_id:int
