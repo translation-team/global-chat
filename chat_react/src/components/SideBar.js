@@ -1,7 +1,6 @@
 import React from "react";
 import Button from "react-bootstrap/esm/Button";
 import '../css/sidebar.css'
-let localhost = 'http://127.0.0.1:8087' //localhost+profile_path[friend_name]
 function SideBar({rooms_info, setRoomWatchId, friend_list, profile_path, setFriendAdd, friend_pend_list}){
     function SideCarCreate(){
         let sidebar = []
@@ -13,7 +12,7 @@ function SideBar({rooms_info, setRoomWatchId, friend_list, profile_path, setFrie
                 className="filterDiscussions all unread single" 
                 id="list-chat-list" data-toggle="list" role="tab"
                 onClick={()=>{setRoomWatchId(rooms_info[room_id].room_id)}}>
-                    <img className="avatar-md" src={profile_path[friend_name]} data-toggle="tooltip" data-placement="top" title="Janette" alt="avatar"/>
+                    <img className="avatar-md" src={process.env.REACT_APP_HOST_URL+profile_path[friend_name]} data-toggle="tooltip" data-placement="top" title="Janette" alt="avatar"/>
                     <div className="status">
                         <i className="material-icons online">fiber_manual_record</i>
                     </div>
@@ -32,7 +31,7 @@ function SideBar({rooms_info, setRoomWatchId, friend_list, profile_path, setFrie
             let friend_name = friend_list[idx]
             sidebar.push(
                 <a href="#" onClick={()=>{setFriendAdd(friend_name)}} className="filterMembers all online contact" data-toggle="modal" data-target="#startnewchat">
-                    <img className="avatar-md" src={profile_path[friend_name]} data-toggle="tooltip" data-placement="top" title="Janette" alt="avatar"/>
+                    <img className="avatar-md" src={process.env.REACT_APP_HOST_URL+profile_path[friend_name]} data-toggle="tooltip" data-placement="top" title="Janette" alt="avatar"/>
                     <div className="status">
                         <i className="material-icons online">fiber_manual_record</i>
                     </div>
@@ -54,7 +53,7 @@ function SideBar({rooms_info, setRoomWatchId, friend_list, profile_path, setFrie
             let friend_name = friend_pend_list[idx]
             sidebar.push(
                 <a className="filterMembers all online contact" data-toggle="modal">
-                    <img className="avatar-md" src={profile_path[friend_name]} data-toggle="tooltip" data-placement="top" title="Janette" alt="avatar"/>
+                    <img className="avatar-md" src={process.env.REACT_APP_HOST_URL+profile_path[friend_name]} data-toggle="tooltip" data-placement="top" title="Janette" alt="avatar"/>
                     <div className="status">
                         <i className="material-icons online">fiber_manual_record</i>
                     </div>

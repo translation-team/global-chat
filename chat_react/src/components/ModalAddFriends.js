@@ -3,7 +3,6 @@ import Button from "react-bootstrap/esm/Button";
 import { useState } from "react";
 import axios from "axios";
 import { Cookies } from "react-cookie";
-let localhost = 'http://127.0.0.1:8087' //localhost+'/api/v1/friend'
 function ModalAddFriends(){
     let [friend_name,setFriendName] = useState();
     let [warning,setWarning] = useState("");

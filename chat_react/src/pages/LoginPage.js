@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import Button from "react-bootstrap/esm/Button";
 import axios from "axios";
 import {Cookies} from 'react-cookie'
-let localhost = 'http://127.0.0.1:8087' //localhost+'/auth/me', localhost+'/api/v1/login
 function LoginPage(){
     const navigate = useNavigate();
     const cookies = new Cookies()
@@ -14,10 +13,11 @@ function LoginPage(){
     let token_type = cookies.get('Token-Type')
     let access_token = cookies.get('Access-Token')
 
+
     if(token_type!==null && access_token!==null){
         axios({
             method:'get',
-            url:process.env.process.env.REACT_APP_HOST_URL+'/auth/me',
+            url:process.env.REACT_APP_HOST_URL+'/auth/me',
             headers:{
                 Authorization : `${token_type} ${access_token}`,
             }
@@ -31,7 +31,7 @@ function LoginPage(){
     }
 
     function login(){
-        axios.post(process.env.process.env.REACT_APP_HOST_URL+'/api/v1/login',{
+        axios.post(process.env.REACT_APP_HOST_URL+'/api/v1/login',{
             "username":username,
             "password":password
         }).then(function(response){

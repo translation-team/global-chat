@@ -1,7 +1,6 @@
 import React from "react";
 import Button from "react-bootstrap/esm/Button";
 import { Link } from "react-router-dom";
-let localhost = 'http://127.0.0.1:8087' //localhost+profile_path[username]
 function Navigations({username, profile_path}){
     return(
         <div>

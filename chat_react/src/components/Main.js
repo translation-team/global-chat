@@ -1,7 +1,6 @@
 import React from "react";
 import { useState,useEffect} from "react";
 
-let localhost = 'http://localhost:8087' // localhost+profile_path[rooms_info[room_id].friend_name]
 function Main({rooms, setRooms, room_watch_id, rooms_info, friend_list, profile_path, ws}){
 
     const [textValue, setTextValue] = useState("");

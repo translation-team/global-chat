@@ -11,8 +11,6 @@ import {Cookies} from 'react-cookie'
 import { useNavigate } from "react-router-dom";
 
 var web_socket;
-let localhost = 'http://127.0.0.1:8087' //localhost+'/auth/me','/api/v1/main-info/'
-let localhost_ws = 'ws://together-chat.tk' //'ws://192.168.0.7:8087'//localhost_ws+'/ws/chat?token='+`${access_token}`)
 
 function MainPage(){
     const cookies = new Cookies();

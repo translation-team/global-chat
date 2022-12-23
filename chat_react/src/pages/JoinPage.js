@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/esm/Button";
-let localhost = 'http://127.0.0.1:8087'; //localhost+'/api/v1/join'
 
 function JoinPage(){
     return(

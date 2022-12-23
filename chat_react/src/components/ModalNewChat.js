@@ -1,7 +1,6 @@
 import axios from "axios";
 import React from "react";
 import {Cookies} from 'react-cookie'
-let localhost = 'http://127.0.0.1:8087' //localhost+'/api/v1/friend'
 function ModalNewChat({friend_add}){
     function add_friend(){
         let cookies = new Cookies();
