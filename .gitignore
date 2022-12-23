@@ -1,1 +1,3 @@
 chat_react/node_modules/
+chat_react/.env.development
+chat_react/.env.production

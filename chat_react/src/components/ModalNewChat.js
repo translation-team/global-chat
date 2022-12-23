@@ -1,36 +1,43 @@
+import axios from "axios";
 import React from "react";
-import Button from "react-bootstrap/esm/Button";
+import {Cookies} from 'react-cookie'
+let localhost = 'http://127.0.0.1:8087' //localhost+'/api/v1/friend'
+function ModalNewChat({friend_add}){
+    function add_friend(){
+        let cookies = new Cookies();
+        let token_type = cookies.get('Token-Type')
+        let access_token = cookies.get('Access-Token')
+        axios.put(
+            process.env.REACT_APP_HOST_URL+'/api/v1/friend',
+            {
+                friend_name:friend_add
+            },
+            {
+                headers:{
+                    Authorization : `${token_type} ${access_token}`,
+                },
+                friend_name:friend_add
+            }
+        )
+        .then(function(response){
+            console.log("친추 요청 승인");
 
-function ModalNewChat(){
+            window.location.replace('/');
+        })
+        .catch(function(error){
+            console.log("친추 요청 승인 실패")
+        })
+    }
     return(
-        <div class="modal fade" id="startnewchat" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="requests">
-                    <div class="title">
-                        <h1>Start new chat</h1>
-                        <button type="button" class="btn" data-dismiss="modal" aria-label="Close"><i class="material-icons">close</i></button>
+        <div className="modal fade" id="startnewchat" tabIndex="-1" role="dialog" aria-hidden="true">
+            <div className="modal-dialog modal-dialog-centered" role="document">
+                <div className="requests">
+                    <div className="title">
+                        <h1>친구 요청 승인</h1>
+                        <button type="button" className="btn" data-dismiss="modal" aria-label="Close"><i className="material-icons">close</i></button>
                     </div>
-                    <div class="content">
-                        <form>
-                            <div class="form-group">
-                                <label for="participant">Recipient:</label>
-                                <input type="text" class="form-control" id="participant" placeholder="Add recipient..." required/>
-                                <div class="user" id="recipient">
-                                    <img class="avatar-sm" src="dist/img/avatars/avatar-female-5.jpg" alt="avatar"/>
-                                    <h5>Keith Morris</h5>
-                                    <button class="btn"><i class="material-icons">close</i></button>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="topic">Topic:</label>
-                                <input type="text" class="form-control" id="topic" placeholder="What's the topic?" required/>
-                            </div>
-                            <div class="form-group">
-                                <label for="message">Message:</label>
-                                <textarea class="text-control" id="message" placeholder="Send your welcome message...">Hmm, are you friendly?</textarea>
-                            </div>
-                            <button type="submit" class="btn button w-100">Start New Chat</button>
-                        </form>
+                    <div className="content">
+                        <button onClick={add_friend} className="btn button w-100">승인 완료</button>
                     </div>
                 </div>
             </div>
