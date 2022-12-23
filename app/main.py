@@ -6,7 +6,7 @@ from database.model import *
 from database.schema import *
 from pydantic import BaseModel
 from typing import Dict,List, Optional,Union
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from datetime import timedelta
 from passlib.context import CryptContext
@@ -46,7 +46,6 @@ Base.metadata.create_all(ENGINE)
 
 def get_db():
     db = SessionLocal()
-
     try:
         yield db
     except Exception as e:
@@ -99,7 +98,7 @@ async def fail_join():
 @app.post('/api/v1/join')
 async def join(file: UploadFile, username: str = Form(), password: str = Form(),lang:str=Form(), db=Depends(get_db)):
     select_lang = LangEnum.ko if lang == 'ko' else LangEnum.en
-    user = User(username=username,hashpw=password,lang=lang,profile_pic='/staitc/pictures/'+username)
+    user = User(username=username,hashpw=password,lang=lang,profile_pic='/static/pictures/'+username+'/profile.jpg')
    
     content = file.file.read()
     file.file.close()
@@ -574,13 +573,10 @@ async def websocket_endpoint(websocket: WebSocket, token:str, db=Depends(get_db)
                     db.add(result_message)
                     db.commit()
 
-                    message_create = MessageCreate(
+                    message_history = MessageHistory(
                         room_id=room_id,
                         from_id=USER_ID,
-                        to_id=friend_id
-                    )
-                    message_history = MessageHistory(
-                        **message_create.dict(),
+                        to_id=friend_id,
                         origin_id=origin_message.id,
                         result_id=result_message.id
                     )
