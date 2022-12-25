@@ -1,4 +1,3 @@
-
 from fastapi import FastAPI,Depends,WebSocket, WebSocketDisconnect,HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from database.database import SessionLocal, ENGINE
@@ -19,7 +18,6 @@ import re
 from googletrans import Translator
 
 translator = Translator()
-
 
 
 app = FastAPI()
@@ -55,9 +53,7 @@ def get_db():
         db.close()
 
 # 예시
-@app.get('/')
-async def index():
-    return FileResponse('templates/index.html')
+
 
 @app.get('/login')
 async def login():
@@ -453,7 +449,6 @@ async def add_friends(friend_info:FriendCreate, current_active_user : User = Dep
                 raise friend_exception
 
         else:
-            print("친구 없는데?")
             raise friend_exception
                 
     except Exception as e:
