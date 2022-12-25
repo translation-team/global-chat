@@ -8,7 +8,6 @@ from typing import Dict,List, Optional,Union
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from datetime import timedelta
-from passlib.context import CryptContext
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from fastapi import UploadFile,Form
@@ -16,21 +15,15 @@ from starlette.responses import RedirectResponse
 import os
 import re
 from googletrans import Translator
+from core.auth import *
+from core.consts import *
+from core.configs import *
+
 
 translator = Translator()
 
-
 app = FastAPI()
 app.mount('/static',StaticFiles(directory='static'),name='static')
-
-origins =[
-    'http://127.0.0.1:3000',
-    'http://localhost:3000',
-    'http://localhost:8087',
-    'http://127.0.0.1:8087',
-    'http://localhost:80',
-    'http://127.0.0.1:80',
-]
 
 app.add_middleware(
     CORSMiddleware,
@@ -42,6 +35,7 @@ app.add_middleware(
 
 Base.metadata.create_all(ENGINE)
 
+
 def get_db():
     db = SessionLocal()
     try:
@@ -52,13 +46,9 @@ def get_db():
     finally:
         db.close()
 
-# 예시
-
-
 @app.get('/login')
 async def login():
     return FileResponse('templates/index.html')
-
 
 @app.get('/signup')
 async def signup():
@@ -93,17 +83,16 @@ async def fail_join():
     
 @app.post('/api/v1/join')
 async def join(file: UploadFile, username: str = Form(), password: str = Form(),lang:str=Form(), db=Depends(get_db)):
-    select_lang = LangEnum.ko if lang == 'ko' else LangEnum.en
-    user = User(username=username,hashpw=password,lang=lang,profile_pic='/static/pictures/'+username+'/profile.jpg')
+    select_lang = 'ko' if lang == 'ko' else 'en'
+    hashpw = pwd_context.hash(password)
+    user = User(username=username,hashpw=hashpw,lang=select_lang,profile_pic='/static/pictures/'+username+'/profile.jpg')
    
     content = file.file.read()
     file.file.close()
 
-
     try:
         db.add(user)
         db.commit()
-
 
         path = './static/pictures/'+username
         if not os.path.isdir(path):
@@ -117,25 +106,10 @@ async def join(file: UploadFile, username: str = Form(), password: str = Form(),
         return RedirectResponse(url='/join/fail',status_code=302)
 
 
-#=======================로그인=====================================#
-pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto') 
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
-SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl='login')
-
-class Token(BaseModel):
-    access_token: str
-    token_type: str
-
-class Login(BaseModel):
-    username:str
-    password:str
 
 def verify_password(input_password, db_password):
-    # return pwd_context.verify(input_password, db_password)
-    return input_password == db_password
+    return pwd_context.verify(input_password, db_password)
+    # return input_password == db_password
 
 def get_userinfo(username: str,db): # username으로 조회할지, primary_key인 id로 조회할지...
     try:
@@ -272,8 +246,6 @@ async def get_main_info(current_active_user : User = Depends(get_current_user),d
             for message in messages:
                 from_id = message.from_id
                 created_at = message.created_at
-                # body = message.origin_message.body
-                # print(message.origin_message.lang)
 
                 origin_lang = message.origin_message.lang
                 if origin_lang == user_lang:
@@ -344,63 +316,6 @@ class Message(BaseModel):
     room_id:int
     content:str
 
-# # axios 테스트
-# @app.post('/api/v1/chat')
-# async def get_user(message:Message, db=Depends(get_db)):
-#     body = message.content
-#     room_id = message.room_id
-
-#     friend_id = db.query(
-#         Friend.friend_id,
-#     ).filter(
-#         Friend.user_id == USER_ID,
-#         Friend.is_deleted == False,
-#         Friend.room_id == room_id
-#     ).first()
-
-#     room_state = db.query(
-#         Room.state
-#     ).filter(
-#         Room.id == room_id
-#     ).first()[0]
-
-#     print(friend_id)
-#     print(room_state)
-
-#     if friend_id and room_state:
-#         try:
-#             friend_id = friend_id[0]
-#             origin_create = OriginCreate(body=body,lang='ko')
-#             origin_message = OriginMessage(**origin_create.dict())
-        
-#             db.add(origin_message)
-#             db.commit()
-
-
-
-#             message_create = MessageCreate(
-#                 room_id=room_id,
-#                 from_id=USER_ID,
-#                 to_id=friend_id
-#             )
-#             message_history = MessageHistory(
-#                 **message_create.dict(),
-#                 origin_id=origin_message.id
-#             )
-
-#             db.add(message_history)
-#             db.commit()
-#         except Exception as e:
-#             print(e)
- 
-
-#     return {
-#         'room_id':'room-'+str(room_id),
-#         'state':'message',
-#         'content':'안녕하세요.',
-#         'date':"2022.12.01 09:46 AM"
-#     }
-
 
 @app.post('/api/v1/friend')
 async def add_friends(friend_info:FriendCreate, current_active_user : User = Depends(get_current_user),db = Depends(get_db)):
@@ -452,13 +367,9 @@ async def add_friends(friend_info:FriendCreate, current_active_user : User = Dep
             raise friend_exception
                 
     except Exception as e:
-        raise friend_exception
         print(e)
+        raise friend_exception
 
-    return {'test':'good'}
-
-class AddFriend(BaseModel):
-    friend_name:str
 
 @app.put('/api/v1/friend')
 async def accept_friends(addfriend:AddFriend, current_active_user : User = Depends(get_current_user),db = Depends(get_db)):

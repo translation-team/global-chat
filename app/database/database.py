@@ -1,8 +1,8 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-import unittest
+from core.consts import DB_URL
 
-DB_URL = 'sqlite:///./global_chat.db' # sqlite
+print(DB_URL)
 def return_engine(url):
     engine = create_engine(url,connect_args={"check_same_thread": False})
     return engine

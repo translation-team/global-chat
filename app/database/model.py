@@ -1,16 +1,8 @@
-import unittest
 from sqlalchemy.orm import declarative_base, relationship
-from sqlalchemy import Column, Integer, String, ForeignKey,Boolean,Enum,DateTime
-from .database import return_engine, DB_URL, return_session
-import enum 
+from sqlalchemy import Integer, String, ForeignKey,Boolean, DateTime,Column
 from datetime import datetime
-from pydantic import BaseModel
 
 Base = declarative_base()
-
-class LangEnum(enum.Enum):
-    ko = "ko" # 한글
-    en = "en" # 영어 
 
 class User(Base):
     __tablename__ = 'user'
