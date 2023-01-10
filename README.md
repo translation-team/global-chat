@@ -18,7 +18,7 @@ URL은 노션에 있는 URL 기반으로 참조해서 작성해주세요.
 
 각자 개발 했으면 backend 브랜치에 commit 하지 말고 새로 브랜치 만들어서 commit 해주세요.
 
-<추가로~>
+<추가로~~>
 
 pip install -r requirements.txt 다시 해주시고
 
